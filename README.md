@@ -1,6 +1,6 @@
 # Random module
 
-## What is this
+## What is this about?
 
 This repository aims at providing a modular and version controlled
 implementation of the Mersenne Twister algorithm for pseudo random number
