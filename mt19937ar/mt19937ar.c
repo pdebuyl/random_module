@@ -41,7 +41,7 @@
    email: m-mat @ math.sci.hiroshima-u.ac.jp (remove space)
 */
 
-#include <stdio.h>
+#include "mt19937ar.h"
 
 /* Period parameters */  
 #define N 624
@@ -49,12 +49,6 @@
 #define MATRIX_A 0x9908b0dfUL   /* constant vector a */
 #define UPPER_MASK 0x80000000UL /* most significant w-r bits */
 #define LOWER_MASK 0x7fffffffUL /* least significant r bits */
-
-typedef struct mt19937ar_struct {
-  unsigned long mt[N]; /* the array for the state vector  */
-  int mti; /* mti==N+1 means mt[N] is not initialized */
-} mt19937ar_t;
-
 
 /* initializes mt[N] with a seed */
 void init_genrand(mt19937ar_t *state, unsigned long s)
@@ -178,21 +172,3 @@ double genrand_res53(mt19937ar_t *state)
 } 
 /* These real versions are due to Isaku Wada, 2002/01/09 added */
 
-int main(void)
-{
-    int i;
-    unsigned long init[4]={0x123, 0x234, 0x345, 0x456}, length=4;
-    mt19937ar_t s;
-    init_by_array(&s, init, length);
-    printf("1000 outputs of genrand_int32()\n");
-    for (i=0; i<1000; i++) {
-      printf("%10lu ", genrand_int32(&s));
-      if (i%5==4) printf("\n");
-    }
-    printf("\n1000 outputs of genrand_real2()\n");
-    for (i=0; i<1000; i++) {
-      printf("%10.8f ", genrand_real2(&s));
-      if (i%5==4) printf("\n");
-    }
-    return 0;
-}
