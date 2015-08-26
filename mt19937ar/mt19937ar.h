@@ -47,6 +47,8 @@
 typedef struct mt19937ar_struct {
   unsigned long mt[mt19937ar_N]; /* the array for the state vector  */
   int mti; /* mti==mt19937ar_N+1 means mt[mt19937ar_N] is not initialized */
+  double gauss;
+  _Bool has_gauss;
 } mt19937ar_t;
 
 /* initializes mt[mt19937ar_N] with a seed */

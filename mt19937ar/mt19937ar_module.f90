@@ -10,6 +10,8 @@ module mt19937ar_type_module
   type, bind(c) :: mt19937ar_t
      integer(c_long) :: mt(N)
      integer(c_int) :: mti
+     real(c_double) :: gauss
+     logical(c_bool) :: has_gauss
   end type mt19937ar_t
 
 end module mt19937ar_type_module
@@ -27,7 +29,7 @@ module mt19937ar_module
        use iso_c_binding
        use mt19937ar_type_module
        type(mt19937ar_t) :: s
-       integer(c_long) :: seed
+       integer(c_long), value :: seed
      end subroutine init_genrand
   end interface
 

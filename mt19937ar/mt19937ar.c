@@ -41,6 +41,7 @@
    email: m-mat @ math.sci.hiroshima-u.ac.jp (remove space)
 */
 
+#include <stdbool.h>
 #include "mt19937ar.h"
 
 /* Period parameters */  
@@ -67,6 +68,7 @@ void init_genrand(mt19937ar_t *state, unsigned long s)
     /* for >32 bit machines */
   }
   state->mti = i;
+  state->has_gauss = false;
 }
 
 /* initialize by an array with array-length */
@@ -97,6 +99,7 @@ void init_by_array(mt19937ar_t *state, unsigned long init_key[], int key_length)
     }
 
     mt[0] = 0x80000000UL; /* MSB is 1; assuring non-zero initial array */ 
+    state->has_gauss = false;
 }
 
 /* generates a random number on [0,0xffffffff]-interval */
