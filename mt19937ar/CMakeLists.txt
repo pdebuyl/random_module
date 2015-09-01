@@ -16,6 +16,9 @@ target_link_libraries(mt19937ar_module mt19937ar)
 add_executable(mt19937ar_reference_1_fortran mt19937ar_reference_1.f90)
 target_link_libraries(mt19937ar_reference_1_fortran mt19937ar_module)
 
+add_executable(mt19937ar_example_1_fortran mt19937ar_example_1.f90)
+target_link_libraries(mt19937ar_example_1_fortran mt19937ar_module)
+
 add_executable(mt19937ar_reference_1_c mt19937ar_reference_1.c)
 target_link_libraries(mt19937ar_reference_1_c mt19937ar)
 

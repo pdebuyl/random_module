@@ -7,9 +7,8 @@ program example
   type(mt19937ar_t) :: state
 
   integer(c_long) :: init(4) = [291, 564, 837, 1110]
-  integer(c_long) :: seed
   integer :: i
-  integer :: j
+  integer(c_long) :: j
 
   call init_by_array(state, init)
 
@@ -19,7 +18,7 @@ program example
 
   j = 0
   do i=1, 2000
-     j = j+ genrand_int32(state)
+     j = j + genrand_int32(state)
   end do
 
   do i=1, 4
