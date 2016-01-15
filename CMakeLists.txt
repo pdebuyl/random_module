@@ -4,4 +4,5 @@ project(random_module NONE)
 enable_testing()
 
 add_subdirectory(mt19937ar)
+add_subdirectory(threefry)
 
