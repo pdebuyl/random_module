@@ -6,7 +6,6 @@
 int main(void) {
 
   threefry_t p, k;
-  threefry_t c;
 
   p.c0 = 0x0;
   p.c1 = 0x0;
