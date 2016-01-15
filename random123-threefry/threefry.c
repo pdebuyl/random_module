@@ -7,6 +7,7 @@
 #define C240 0x1BD11BDAA9FC1A22
 #define N_ROUNDS 20
 #define MASK 0xffffffffffffffff
+#define DOUBLE_MULT 5.421010862427522e-20
 
 static const int ROTATION[] = {16, 42, 12, 31, 16, 32, 24, 21};
 
@@ -37,4 +38,11 @@ threefry_t threefry(threefry_t p, threefry_t k) {
   x.c0 += K[(N_ROUNDS/4)%KEY_LENGTH];
   x.c1 += K[(N_ROUNDS/4+1)%KEY_LENGTH] + N_ROUNDS/4;
   return x;
+}
+
+double threefry_double(threefry_t *c, threefry_t *k) {
+  threefry_t x;
+  x = threefry(*c, *k);
+  c->c0++;
+  return x.c0 * DOUBLE_MULT;
 }
