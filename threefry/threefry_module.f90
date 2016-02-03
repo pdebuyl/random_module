@@ -30,6 +30,7 @@ module threefry_module
   public :: threefry_rng_t
   public :: threefry_double
   public :: threefry_normal
+  public :: threefry_rng_init
 
   interface
      real(c_double) function threefry_double_c(c, k) bind(c, name='threefry_double')
@@ -41,6 +42,24 @@ module threefry_module
   end interface
 
 contains
+
+  subroutine threefry_rng_init(state, seed)
+    type(threefry_rng_t), intent(out) :: state(:)
+    integer(c_int64_t), intent(in) :: seed
+
+    integer :: i, n
+
+    n = size(state)
+
+    do i = 1, n
+     state(i)%counter%c0 = 0
+     state(i)%counter%c1 = 0
+     state(i)%key%c0 = int(i, c_int64_t)
+     state(i)%key%c1 = seed
+     state(i)%has_gauss = .false.
+    end do
+
+  end subroutine threefry_rng_init
 
   !! Return a single [0,1[ double precision number
   function threefry_double(state) result(data)
