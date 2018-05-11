@@ -32,6 +32,11 @@ module threefry_module
   public :: threefry_normal
   public :: threefry_rng_init
 
+  interface threefry_rng_init
+     module procedure threefry_rng_init_scalar
+     module procedure threefry_rng_init_rank1
+  end interface threefry_rng_init
+
   interface
      real(c_double) function threefry_double_c(c, k) bind(c, name='threefry_double')
        use iso_c_binding
@@ -43,7 +48,7 @@ module threefry_module
 
 contains
 
-  subroutine threefry_rng_init(state, seed)
+  subroutine threefry_rng_init_rank1(state, seed)
     type(threefry_rng_t), intent(out) :: state(:)
     integer(c_int64_t), intent(in) :: seed
 
@@ -52,14 +57,27 @@ contains
     n = size(state)
 
     do i = 1, n
-     state(i)%counter%c0 = 0
-     state(i)%counter%c1 = 0
-     state(i)%key%c0 = int(i, c_int64_t)
-     state(i)%key%c1 = seed
-     state(i)%has_gauss = .false.
+       call threefry_rng_init_scalar(state(i), seed, int(i, c_int64_t))
     end do
 
-  end subroutine threefry_rng_init
+  end subroutine threefry_rng_init_rank1
+
+  subroutine threefry_rng_init_scalar(state, seed, c0)
+    type(threefry_rng_t), intent(out) :: state
+    integer(c_int64_t), intent(in) :: seed
+    integer(c_int64_t), intent(in), optional :: c0
+
+    state%counter%c0 = 0
+    state%counter%c1 = 0
+    if (present(c0)) then
+       state%key%c0 = c0
+    else
+       state%key%c0 = 0
+    end if
+    state%key%c1 = seed
+    state%has_gauss = .false.
+
+  end subroutine threefry_rng_init_scalar
 
   !! Return a single [0,1[ double precision number
   function threefry_double(state) result(data)
