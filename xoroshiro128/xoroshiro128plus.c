@@ -31,17 +31,30 @@ See <http://creativecommons.org/publicdomain/zero/1.0/>. */
    better results in our test than the 2016 version (a=55, b=14, c=36).
 */
 
+#define DOUBLE_MULT 5.421010862427522e-20
+
 static inline uint64_t rotl(const uint64_t x, int k) {
 	return (x << k) | (x >> (64 - k));
 }
 
 
-static uint64_t s[2];
-
-uint64_t next(void) {
+uint64_t next(uint64_t s[2]) {
 	const uint64_t s0 = s[0];
 	uint64_t s1 = s[1];
 	const uint64_t result = s0 + s1;
+
+	s1 ^= s0;
+	s[0] = rotl(s0, 24) ^ s1 ^ (s1 << 16); // a, b
+	s[1] = rotl(s1, 37); // c
+
+	return result;
+}
+
+double next_double(uint64_t s[2]) {
+	const uint64_t s0 = s[0];
+	uint64_t s1 = s[1];
+	const uint64_t tmp = s0 + s1;
+	const double result = DOUBLE_MULT*tmp;
 
 	s1 ^= s0;
 	s[0] = rotl(s0, 24) ^ s1 ^ (s1 << 16); // a, b
@@ -55,7 +68,7 @@ uint64_t next(void) {
    to 2^64 calls to next(); it can be used to generate 2^64
    non-overlapping subsequences for parallel computations. */
 
-void jump(void) {
+void jump(uint64_t s[2]) {
 	static const uint64_t JUMP[] = { 0xdf900294d8f554a5, 0x170865df4b3201fc };
 
 	uint64_t s0 = 0;
@@ -66,7 +79,7 @@ void jump(void) {
 				s0 ^= s[0];
 				s1 ^= s[1];
 			}
-			next();
+			next(s);
 		}
 
 	s[0] = s0;
